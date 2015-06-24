@@ -1,0 +1,3 @@
+[submodule "BlogLayout"]
+	path = BlogLayout
+	url = git@github.com:ProbablePrime/BlogLayout.git
