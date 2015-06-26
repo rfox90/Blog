@@ -1,6 +1,10 @@
 ---
 layout: post
 title: Example content
+category: test2
+tags:
+  - test2
+
 ---
 
 
