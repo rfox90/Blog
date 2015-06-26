@@ -15,7 +15,19 @@ paginate:            5
 author:
   name:              ProbablePrime
   url:               https://twitter.com/probableprime
-  email:             markdotto@gmail.com
+  email:             prime@ahref.co.uk
+
+gems: [jekyll-tagging]
+
+exclude: [BlogLayout]
 
 # Custom vars
 version:             1.0.0
+
+#Tag Plugin vars
+tag_page_layout: tag_page
+tag_page_dir: tag
+tag_feed_layout: tag_feed
+tag_feed_dir: tag
+
+#ignored_tags:[]
