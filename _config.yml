@@ -17,7 +17,7 @@ author:
   url:               https://twitter.com/probableprime
   email:             prime@ahref.co.uk
 
-gems: [jekyll-tagging]
+gems: [jekyll/tagging]
 
 exclude: [BlogLayout]
 
