@@ -1,3 +1,3 @@
 #!/bin/sh
 
-gem install jekyll-tagging
+sudo bundle install

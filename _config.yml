@@ -19,7 +19,7 @@ author:
 
 gems: [jekyll/tagging]
 
-exclude: [BlogLayout]
+exclude: [BlogLayout,install.sh,Gemfile,out.log]
 
 # Custom vars
 version:             1.0.0
