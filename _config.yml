@@ -31,3 +31,7 @@ tag_feed_layout: tag_feed
 tag_feed_dir: tag
 
 #ignored_tags:[]
+
+#disqus
+disqus_shortname: probableprime
+
