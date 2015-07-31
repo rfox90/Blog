@@ -33,5 +33,5 @@ tag_feed_dir: tag
 #ignored_tags:[]
 
 #disqus
-disqus_shortname: ahref-uk
+disqus_shortname: 'ahref-uk'
 
