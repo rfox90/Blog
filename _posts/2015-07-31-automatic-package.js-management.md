@@ -26,13 +26,13 @@ There is some talk of [fixing this in the future](https://trello.com/c/mHK2dpr5/
 
 Something that instantly came to mind were [globs](https://en.wikipedia.org/wiki/Glob_%28programming%29) especially coming from projects that used other build systems such as [gulp](http://gulpjs.com/) and [grunt](http://gruntjs.com/).
 
-Globs allow you to specify patterns similar to Regular Expressions and wildcards that match sets of files in a system. 
+Globs allow you to specify patterns similar to Regular Expressions that match sets of files in a system. 
 
 For example `client/**` would match everything in the client folder of an application or package.
 
-The goal then was to use globs and package.js to hand some of the load order processing back to the computer and instead focus on building a tidy application.
+The goal here is to use globs and package.js to hand some of the load order processing back to the computer and instead focus on building the application.
 
-To use this I restructured my application into a local core package. With the plan to later split it apart. This way all of Package.js's features are available to the application but it still is essentially one application.
+To use this I restructured my application into a local core packages. This way all of Package.js's features are available to the application and I can control build order. The application is only comprised of one core package currently but splitting it up and continueing to use this technique should be easy.
 
 
 ##Globs in Package.js
@@ -59,7 +59,7 @@ api.addFiles(glob.sync('client/**'),['client']);
 {% endhighlight %}
    
 ###Excluding Folders
-The above glob unfortunately includes folders.
+The above glob unfortunately includes folders. You can pass options to the glob.sync method to ignore folders, but this didn't seem to work in meteor.
 
 So given the tree:
 
@@ -74,7 +74,7 @@ The resulting array from the glob would be:
 {% endhighlight %}
 
 
-Meteor doesn't like this so we need to edit our glob a little bit. It supports a regular expression like syntax so:
+To avoid this we need to edit our glob a little bit. It supports a regular expression like syntax so:
 
 {% highlight js %}
 'client/{**/*,*}.+(js|html)'
@@ -86,13 +86,15 @@ Will include any files with the .js or .html extension(I'm not using coffee scri
 
 Glob defaults its searching to the CWD for the application and for the meteor build process this is unfortunately not anywhere near the Package's directory. 
 
-Thankfully due to the core package being within the application we can get to its director quite easily if we know its name. You can then pass that in an options object to glob:
+Thankfully due to the package being within the application we can get to its director quite easily if we know its name. You can then pass that in an options object to glob:
 
 {% highlight js %}
 var path = Npm.require('path');
 var packageName = 'core';
 options.cwd = path.join(process.cwd() + '/packages/'+packageName+'/');
 {% endhighlight %}
+
+This won't work for external packages that are not in the packages directory but i'm looking at ways to support this. 
 
 
 ###Putting it all Together
@@ -115,18 +117,20 @@ function registerGlob(glob,target) {
 {% endhighlight %}
 Which i scoped inside of `Package.onUse` so that api is defined.
 
-I also disliked the way api.addFiles requires the architectures to be specified in an array e.g. `['client','server']`
-So I wrapped that in registerGlob. As an example here is how the package registers the files that contain the configuration of other 3rd party packages:
+I also disliked the way api.addFiles requires the architectures to be specified in an array e.g. `['client','server']`. It allows fine control over where your package files go but for this glob approach I wanted something easier to use.
+So by using registerGlob I can just specify the location as a single string:
 {% highlight js %}
 registerGlob('common/config/{**/*,*}.+(js|html)','both');
 registerGlob('server/config/{**/*,*}.+(js|html)','server');
 registerGlob('client/config/{**/*,*}.+(js|html)','client');
 {% endhighlight %}
-This combined with regular use of api.addFiles allows a much finer control over the file load order when needed but also allows you to step back and let a computer decide.
+
 
 I've posted a complete example Package.js which uses this to a [github gist](https://gist.github.com/rfox90/fa1a7c7a85f6ebc8bda1).
 
 The approach seems to work well in development but I would probably move it to a staticly generated file for a production environment.
+
+Hopefully we'll see something easier to use coming in future meteor versions.
 
 Let me know what you think!
 
